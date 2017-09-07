@@ -524,11 +524,18 @@ int Labeler::predict(const vector<Feature>& features, vector<string>& outputs, c
   vector<int> labelIdx, label2Idx;
   m_classifier.predict(features, labelIdx);
   outputs.clear();
-
+  cout << "predict:";
   for (int idx = 0; idx < words.size(); idx++) {
     string label = m_labelAlphabet.from_id(labelIdx[idx]);
     outputs.push_back(label);
+	cout << words[idx];
+	if (label == "s-seg" || label == "e-seg")
+		cout << " ";
+	else if(label == "b-seg")
+		;
+	//cout << words[idx] << ":" << label << " ";
   }
+  cout << endl;
 
   return 0;
 }
@@ -545,6 +552,7 @@ void Labeler::test(const string& testFile, const string& outputFile, const strin
   vector<Instance> testInstResults;
   Metric metric_test;
   metric_test.reset();
+  cout << "size of testExamples = "<< testExamples.size() << endl;
   for (int idx = 0; idx < testExamples.size(); idx++) {
     vector<string> result_labels;
     predict(testExamples[idx].m_features, result_labels, testInsts[idx].words);
